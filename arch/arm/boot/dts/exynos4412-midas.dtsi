@@ -308,11 +308,13 @@
 			interrupts = <5 IRQ_TYPE_LEVEL_HIGH>;
 			reg = <0x39>;
 
+/*
 			port {
 				mhl_to_hdmi: endpoint {
 					remote-endpoint = <&hdmi_to_mhl>;
 				};
 			};
+*/
 		};
 	};
 
@@ -545,6 +547,7 @@
 	status = "okay";
 };
 
+/*
 &hdmi {
 	hpd-gpios = <&gpx3 7 GPIO_ACTIVE_HIGH>;
 	pinctrl-names = "default";
@@ -567,6 +570,7 @@
 		};
 	};
 };
+*/
 
 &hsotg {
 	vusb_d-supply = <&ldo15_reg>;
@@ -1201,10 +1205,12 @@
 		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
 	};
 
+/*
 	hdmi_hpd: hdmi-hpd-pins {
 		samsung,pins = "gpx3-7";
 		samsung,pin-pud = <EXYNOS_PIN_PULL_DOWN>;
 	};
+*/
 
 	sleep1: sleep-state {
 		PIN_SLP(gpk0-0, PREV, NONE);
