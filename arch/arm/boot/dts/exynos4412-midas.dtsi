@@ -213,6 +213,29 @@
 				maxim,battery-overcurrent-microamp = <3500000>;
 				maxim,charge-input-threshold-microvolt = <4300000>;
 			};
+
+			max77693-muic {
+				compatible = "maxim,max77693-muic";
+
+				musb_con: connector {
+					compatible = "samsung,usb-connector-11pin",
+						     "usb-b-connector";
+					label = "micro-USB";
+					type = "micro";
+
+					ports {
+						#address-cells = <1>;
+						#size-cells = <0>;
+
+						port@0 {
+							reg = <0>;
+							musb_con_to_mhl: endpoint {
+								remote-endpoint = <&mhl_to_musb_con>;
+							};
+						};
+					};
+				};
+			};
 		};
 	};
 
@@ -320,6 +343,14 @@
 
 					mhl_to_hdmi: endpoint {
 						remote-endpoint = <&hdmi_to_mhl>;
+					};
+				};
+
+				port@1 {
+					reg = <1>;
+
+					mhl_to_musb_con: endpoint {
+						remote-endpoint = <&musb_con_to_mhl>;
 					};
 				};
 			};
