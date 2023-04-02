@@ -27,6 +27,9 @@
 		i2c11 = &i2c_max77693;
 		i2c12 = &i2c_max77693_fuel;
 		i2c13 = &i2c_an30259a;
+		mmc0 = &mshc_0;
+		mmc2 = &sdhci_2;
+		mmc3 = &sdhci_3;
 	};
 
 	chosen {
