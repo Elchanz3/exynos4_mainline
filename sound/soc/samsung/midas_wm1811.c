@@ -175,6 +175,9 @@ static int midas_mic_bias(struct snd_soc_dapm_widget *w,
 	struct snd_soc_card *card = w->dapm->card;
 	struct midas_priv *priv = snd_soc_card_get_drvdata(card);
 
+	if (!priv->reg_mic_bias)
+		return 0;
+
 	switch (event) {
 	case SND_SOC_DAPM_PRE_PMU:
 		return regulator_enable(priv->reg_mic_bias);
@@ -446,18 +449,23 @@ static int midas_probe(struct platform_device *pdev)
 	snd_soc_card_set_drvdata(card, priv);
 	card->dev = dev;
 
-	priv->reg_mic_bias = devm_regulator_get(dev, "mic-bias");
+	priv->reg_mic_bias = devm_regulator_get_optional(dev, "mic-bias");
 	if (IS_ERR(priv->reg_mic_bias)) {
-		dev_err(dev, "Failed to get mic bias regulator\n");
-		return PTR_ERR(priv->reg_mic_bias);
+		ret = PTR_ERR(priv->reg_mic_bias);
+		if (ret == -ENODEV) {
+			priv->reg_mic_bias = NULL;
+		} else {
+			dev_err(dev, "Failed to get mic bias regulator\n");
+			return ret;
+		}
 	}
 
 	priv->reg_submic_bias = devm_regulator_get_optional(dev, "submic-bias");
 	if (IS_ERR(priv->reg_submic_bias)) {
 		ret = PTR_ERR(priv->reg_submic_bias);
-		if (ret == -ENODEV)
+		if (ret == -ENODEV) {
 			priv->reg_submic_bias = NULL;
-		else {
+		} else {
 			dev_err(dev, "Failed to get submic bias regulator\n");
 			return ret;
 		}
