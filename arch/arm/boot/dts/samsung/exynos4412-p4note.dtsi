@@ -133,7 +133,16 @@
 		enable-active-high;
 	};
 
-	vbatt: voltage-regulator-6 {
+	submic_bias_reg: voltage-regulator-6 {
+		compatible = "regulator-fixed";
+		regulator-name = "SUBMIC_BIAS";
+		pinctrl-names = "default";
+		pinctrl-0 = <&submic_bias>;
+		gpios = <&gpj0 3 GPIO_ACTIVE_HIGH>;
+		enable-active-high;
+	};
+
+	vbatt: voltage-regulator-7 {
 		compatible = "regulator-fixed";
 		regulator-name = "VBATT";
 		regulator-min-microvolt = <5000000>;
@@ -279,11 +288,12 @@
 		compatible = "samsung,midas-audio";
 		model = "p4note";
 		mic-bias-supply = <&mic_bias_reg>;
+		submic-bias-supply = <&submic_bias_reg>;
 		lineout-sel-gpios = <&gpj1 2 GPIO_ACTIVE_HIGH>;
 		pinctrl-names = "default";
 		pinctrl-0 = <&lineout_en>;
 
-		samsung,audio-routing =
+		audio-routing =
 			"HP", "HPOUT1L",
 			"HP", "HPOUT1R",
 
@@ -295,11 +305,11 @@
 			"RCV", "HPOUT2N",
 			"RCV", "HPOUT2P",
 
-			"HDMI", "LINEOUT1N",
-			"HDMI", "LINEOUT1P",
-
 			"LINE", "LINEOUT2N",
 			"LINE", "LINEOUT2P",
+
+			"HDMI", "LINEOUT1N",
+			"HDMI", "LINEOUT1P",
 
 			"IN1LP", "MICBIAS1",
 			"IN1LN", "MICBIAS1",
@@ -308,6 +318,7 @@
 			"IN1RP", "Sub Mic",
 			"IN1RN", "Sub Mic",
 
+			"IN2LN", "MICBIAS2",
 			"IN2LP:VXRN", "MICBIAS2",
 			"Headset Mic", "MICBIAS2";
 
@@ -872,6 +883,12 @@
 		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
 	};
 
+	submic_bias: submic-bias-pins {
+		samsung,pins = "gpj0-3";
+		samsung,pin-function = <EXYNOS_PIN_FUNC_OUTPUT>;
+		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
+	};
+
 	lineout_en: lineout-en-pins {
 		samsung,pins = "gpj1-2";
 		samsung,pin-function = <EXYNOS_PIN_FUNC_OUTPUT>;
@@ -1009,7 +1026,6 @@
 	main_mic_bias: main-mic-bias-pins {
 		samsung,pins = "gpm0-0";
 		samsung,pin-function = <EXYNOS_PIN_FUNC_OUTPUT>;
-		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
 	};
 
 	led_bl_reset: led-bl-reset-pins {
