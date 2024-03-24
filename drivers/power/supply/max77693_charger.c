@@ -25,7 +25,7 @@ struct max77693_charger {
 	u32 constant_volt;
 	u32 min_system_volt;
 	u32 thermal_regulation_temp;
-	u32 batttery_overcurrent;
+	u32 battery_overcurrent;
 	u32 charge_input_threshold_volt;
 };
 
@@ -520,7 +520,7 @@ static int max77693_set_thermal_regulation_temp(struct max77693_charger *chg,
 			CHG_CNFG_07_REGTEMP_MASK, data);
 }
 
-static int max77693_set_batttery_overcurrent(struct max77693_charger *chg,
+static int max77693_set_battery_overcurrent(struct max77693_charger *chg,
 		unsigned int uamp)
 {
 	unsigned int data;
@@ -617,7 +617,7 @@ static int max77693_reg_init(struct max77693_charger *chg)
 	if (ret)
 		return ret;
 
-	ret = max77693_set_batttery_overcurrent(chg, chg->batttery_overcurrent);
+	ret = max77693_set_battery_overcurrent(chg, chg->battery_overcurrent);
 	if (ret)
 		return ret;
 
@@ -648,8 +648,8 @@ static int max77693_dt_init(struct device *dev, struct max77693_charger *chg)
 		chg->thermal_regulation_temp = DEFAULT_THERMAL_REGULATION_TEMP;
 
 	if (of_property_read_u32(np, "maxim,battery-overcurrent-microamp",
-			&chg->batttery_overcurrent))
-		chg->batttery_overcurrent = DEFAULT_BATTERY_OVERCURRENT;
+			&chg->battery_overcurrent))
+		chg->battery_overcurrent = DEFAULT_BATTERY_OVERCURRENT;
 
 	if (of_property_read_u32(np, "maxim,charge-input-threshold-microvolt",
 			&chg->charge_input_threshold_volt))
